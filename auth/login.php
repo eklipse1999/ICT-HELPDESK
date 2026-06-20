@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
         </button>
     </form>
-    <div class="hint">Default: username <strong>admin</strong> / password <strong>Admin@1234</strong></div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
