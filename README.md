@@ -83,55 +83,61 @@ This project was developed as a mini-project based on an attachment at **Techima
 ```
 ICT-HELPDESK/
 │
-├── admin/                  # Admin-only pages
-│   ├── dashboard.php       # Role-based dashboard
-│   ├── users.php           # User management
-│   ├── create_user.php
-│   ├── edit_user.php
-│   └── departments.php
+├── admin/
+│   ├── create_user.php        # Create new system user
+│   ├── dashboard.php          # Role-based dashboard (Admin / Technician / Staff)
+│   ├── departments.php        # Department management
+│   ├── edit_user.php          # Edit existing user
+│   ├── profile.php            # User profile & password change
+│   ├── users.php              # User listing
+│   └── users_action.php       # Toggle user active/inactive
 │
 ├── api/
-│   └── notifications.php   # JSON endpoint for bell notifications
+│   └── notifications.php      # JSON endpoint for notification bell
 │
 ├── assets/
-│   ├── css/style.css       # Custom styles
-│   ├── js/main.js          # UI interactions
-│   └── images/             # Logo and assets
+│   ├── css/
+│   │   └── style.css          # Custom stylesheet
+│   ├── images/                # Logo and image assets
+│   └── js/
+│       └── main.js            # UI interactions & utilities
 │
-├── assets_management/      # ICT asset CRUD
-│   ├── view_assets.php
-│   ├── add_asset.php
-│   ├── edit_asset.php
-│   └── delete_asset.php
+├── assets_management/
+│   ├── add_asset.php          # Add new ICT asset
+│   ├── delete_asset.php       # Delete asset handler
+│   ├── edit_asset.php         # Edit existing asset
+│   └── view_assets.php        # Asset inventory list with search & filter
 │
 ├── auth/
-│   ├── login.php
-│   └── logout.php
+│   ├── login.php              # Login page
+│   └── logout.php             # Session destroy & redirect
 │
 ├── config/
-│   ├── database.php        # DB connection
-│   ├── session.php         # Auth helpers & timezone
-│   └── schema.sql          # Full database schema + seed data
+│   ├── database.php           # Database connection
+│   ├── schema.sql             # Full DB schema + seed data
+│   └── session.php            # Auth helpers, role checks & timezone
 │
 ├── includes/
-│   ├── header.php          # HTML head + global CSS
-│   ├── sidebar.php         # Role-aware navigation
-│   └── footer.php          # Scripts + flash messages
+│   ├── footer.php             # Closing HTML, flash messages & Bootstrap JS
+│   ├── header.php             # HTML head, global CSS & notification styles
+│   ├── sidebar.php            # Role-aware navigation sidebar
+│   └── topbar.php             # Shared topbar component
 │
 ├── maintenance/
-│   ├── maintenance_log.php
-│   └── history.php
+│   ├── history.php            # Maintenance history log
+│   └── maintenance_log.php    # Log new maintenance activity
 │
 ├── reports/
-│   └── reports.php         # Analytics & charts
+│   └── reports.php            # Analytics, charts & department breakdown
 │
 ├── tickets/
-│   ├── create_ticket.php
-│   ├── view_tickets.php
-│   ├── ticket_details.php  # Includes comment thread
-│   └── assign_ticket.php
+│   ├── assign_ticket.php      # Assign tickets to technicians (Admin only)
+│   ├── create_ticket.php      # Submit new support ticket
+│   ├── ticket_details.php     # Ticket detail view with comments thread
+│   └── view_tickets.php       # All tickets list with filters
 │
-└── index.php               # Entry point — redirects by auth state
+├── .gitignore
+└── index.php                  # Entry point — redirects by login state
 ```
 
 ---
@@ -157,12 +163,12 @@ C:\xampp\htdocs\ICT-HELPDESK\
 **3. Create the database**
 - Open phpMyAdmin → `http://localhost/phpmyadmin`
 - Create a new database named `ict_helpdesk`
-- Click the **SQL** tab and import/paste the contents of `config/schema.sql`
+- Click the **SQL** tab and paste the contents of `config/schema.sql`
 - Run the query — this creates all 7 tables and seeds the default admin account
 
-**4. Configure database connection** *(if needed)*
+**4. Configure database connection** *(only if your MySQL has a password set)*
 
-Open `config/database.php` and update if your XAMPP MySQL uses a password:
+Open `config/database.php` and update:
 ```php
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
@@ -173,30 +179,23 @@ define('DB_NAME', 'ict_helpdesk');
 **5. Start XAMPP**
 - Start **Apache** and **MySQL** from the XAMPP Control Panel
 
-**6. Open the system**
+**6. Open the system in your browser**
 ```
 http://localhost/ICT-HELPDESK
 ```
 
 ---
 
-## 🔐 Default Login
+## 🔐 Default Login Credentials
 
 | Field | Value |
 |---|---|
 | Username | `admin` |
 | Password | `Admin@1234` |
 
-> ⚠️ Change the admin password immediately after first login in a production environment.
+> ⚠️ Change the admin password after first login in any production environment.
 
-> **Note:** If login fails with the default credentials, the bcrypt hash in `schema.sql` may be incompatible with your PHP version. Run `fix_password.php` (see below) to regenerate it.
-
-### Password Fix Script
-Place `fix_password.php` in the root folder and visit:
-```
-http://localhost/ICT-HELPDESK/fix_password.php
-```
-**Delete the file immediately after use.**
+> **Note:** If login fails with the default credentials, the bcrypt hash in `schema.sql` may be incompatible with your PHP version. Create a temporary `fix_password.php` file in the project root, visit it in your browser to regenerate the hash, then delete it immediately.
 
 ---
 
@@ -218,21 +217,21 @@ The system uses **7 tables**:
 
 ## 🚀 Deployment Note
 
-This system is designed for **LAN (Local Area Network) deployment**. It does not require internet access to function — staff access it via the office network using the server's local IP address (e.g. `http://192.168.1.10/ICT-HELPDESK`). This means internet-related ICT issues can still be reported since the system runs independently on the office LAN.
+This system is designed for **LAN (Local Area Network) deployment**. It does not require internet access to function — staff access it via the office network using the server's local IP address (e.g. `http://192.168.1.10/ICT-HELPDESK`). This means internet-related ICT issues can still be reported since the helpdesk system runs independently on the internal office network.
 
 ---
 
 ## 👨‍💻 Developer
 
-**Eklipse** — Student, Kumasi Technical University (KsTU)  
-Attachment Organization: **Techiman Metropolitan Assembly**  
+**Eklipse** — Student, Kumasi Technical University (KsTU)
+Attachment Organization: **Techiman Metropolitan Assembly**
 📍 Techiman, Bono East Region, Ghana
 
 ---
 
 ## 📄 License
 
-This project was developed for academic purposes as part of an industrial attachment programme.
+This project was developed for academic purposes as part of an industrial attachment programme at Kumasi Technical University (KsTU).
 
 ---
 
